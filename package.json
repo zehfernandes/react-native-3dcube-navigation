@@ -3,7 +3,8 @@
   "keywords": [
     "react-component",
     "react-native",
-    "ios"
+    "ios",
+    "android"
   ],
   "version": "1.0.0",
   "description": "3D cube navigation JS",
@@ -13,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leecade/react-native-swiper.git"
+    "url": "git+https://github.com/zehfernandes/react-native-3dcube-navigation.git"
   },
   "author": "Zeh Fernandes",
   "license": "ISC",
@@ -21,7 +22,7 @@
     "src"
   ],
   "bugs": {
-    "url": "https://github.com/leecade/react-native-swiper/issues"
+    "url": "https://github.com/zehfernandes/react-native-3dcube-navigation/issues"
   },
-  "homepage": "https://github.com/leecade/react-native-swiper#readme"
+  "homepage": "https://github.com/zehfernandes/react-native-3dcube-navigation#readme"
 }
