@@ -7,10 +7,7 @@ export default class CubeNavigationVertical extends React.Component {
   constructor(props) {
     super(props)
 
-    this.pages = []
-    for (var i = 0; i < this.props.children.length; i++) {
-      this.pages.push(height * -i)
-    }
+    this.pages = this.props.children.map((child, index) => width * -index)
 
     this.state = {
       scrollLockPage: this.pages[this.props.scrollLockPage]
@@ -89,22 +86,6 @@ export default class CubeNavigationVertical extends React.Component {
     }
   }
 
-  render() {
-    let expandStyle = this.props.expandView ? { top: 0, left: -100, width: width + 200, height } : { width, height }
-
-    return (
-      <Animated.View
-        style={{ backgroundColor: "#000" }}
-        ref={view => { this._scrollView = view; }}
-        {...this._panResponder.panHandlers}
-      >
-        <Animated.View style={[{ backgroundColor: '#000', position: 'absolute', width, height }, expandStyle]}>
-          {this.props.children.map(this._renderChild)}
-        </Animated.View>
-      </Animated.View>
-    );
-  }
-
   /*
   Private methods
   */
@@ -178,17 +159,34 @@ export default class CubeNavigationVertical extends React.Component {
 
     let array = this.pages
 
-    var i = 0;
-    var minDiff = 1000;
-    var ans;
-    for (i in array) {
-      var m = Math.abs(num - array[i]);
+    var i = 0
+    const minDiff = 1000
+    let ans
+    for (let i in array) {
+      const m = Math.abs(num - array[i])
       if (m < minDiff) {
-        minDiff = m;
-        ans = array[i];
+        minDiff = m
+        ans = array[i]
+        break
       }
     }
-    return ans;
+    return ans
+  }
+
+  render() {
+    let expandStyle = this.props.expandView ? { top: 0, left: -100, width: width + 200, height } : { width, height }
+
+    return (
+      <Animated.View
+        style={{ backgroundColor: "#000" }}
+        ref={view => { this._scrollView = view; }}
+        {...this._panResponder.panHandlers}
+      >
+        <Animated.View style={[{ backgroundColor: '#000', position: 'absolute', width, height }, expandStyle]}>
+          {this.props.children.map(this._renderChild)}
+        </Animated.View>
+      </Animated.View>
+    );
   }
 
 }
