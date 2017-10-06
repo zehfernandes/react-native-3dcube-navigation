@@ -10,7 +10,7 @@ $ npm i react-native-3dcube-navigation --save
 
 ### Demo
 
-<img src="http://www.dropbox.com/s/vhizek7qlr45845/3dcube.gif?raw=1"  />
+<img src="http://www.dropbox.com/s/8w1rhfbyu0zrzfv/3dcube.gif?raw=1"  />
 
 ### Basic Usage
 
