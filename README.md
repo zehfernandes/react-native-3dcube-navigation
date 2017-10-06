@@ -1,3 +1,5 @@
+<img src="http://www.dropbox.com/s/gku8mlgnmzqk6n6/3dcube_test.png?raw=1" width="150px" />
+
 # react-native-3dcube-navigation
 
 ### Installation
@@ -6,10 +8,13 @@
 $ npm i react-native-3dcube-navigation --save
 ```
 
+### Demo
+
+<img src="http://www.dropbox.com/s/vhizek7qlr45845/3dcube.gif?raw=1"  />
+
 ### Basic Usage
 
-__Horizontal__
-
+##### Horizontal
 ```js
 import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation'
 
@@ -28,7 +33,7 @@ import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation'
 </View >
 ```
 
-__Vertical__
+##### Vertical
 ```js
 import { CubeNavigationVertical } from 'react-native-3dcube-navigation'
 
@@ -53,18 +58,15 @@ import { CubeNavigationVertical } from 'react-native-3dcube-navigation'
 | :------------ |:---------------:| :---------------:| :-----|
 | expandView | false | `bool` | If `true`, the view expands not showing the background |
 | scrollLockPage | null | `number` | Lock swipe to the next pages, referring the index number of the page |
+| callBackAfterSwipe | null | `function` | Callback function after release |
 
 ### Methods
 
 #### scrollTo(index, animated)
 
-Scroll to the page, start in 0.
-
-Parameters:
-
 | Name  | Type     | default | Description |
 | :---- | :------: | :------: | :--- |
-| index | `number`   | `undefined` | |
+| index | `number`   | `undefined` | Scroll to the page, start in 0. |
 | animated | `bool`   | `true` |  |
 
 ### Examples
@@ -74,5 +76,7 @@ $ cd examples
 $ npm i
 $ react-native run-ios
 ```
+
+<br/>
 
 > Inspired by [tlackemann](https://github.com/tlackemann/react-native-cube-transition) but implemented only with react-native libs.
