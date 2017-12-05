@@ -72,7 +72,7 @@ export default class CubeNavigationHorizontal extends React.Component {
     @page: index
   */
   scrollTo(page, animated) {
-    animated = animated || true
+    animated = animated ? true : false
 
     if (animated) {
       Animated.spring(this._animatedValue, {
@@ -158,18 +158,17 @@ export default class CubeNavigationHorizontal extends React.Component {
 
     let array = this.pages
 
-    var i = 0
-    const minDiff = 1000
-    let ans
-    for (let i in array) {
-      const m = Math.abs(num - array[i])
+    let i = 0;
+    let minDiff = 1000;
+    let ans;
+    for (i in array) {
+      let m = Math.abs(num - array[i]);
       if (m < minDiff) {
-        minDiff = m
-        ans = array[i]
-        break
+        minDiff = m;
+        ans = array[i];
       }
     }
-    return ans
+    return ans;
   }
 
   render() {

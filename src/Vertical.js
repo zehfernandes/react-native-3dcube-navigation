@@ -7,7 +7,7 @@ export default class CubeNavigationVertical extends React.Component {
   constructor(props) {
     super(props)
 
-    this.pages = this.props.children.map((child, index) => width * -index)
+    this.pages = this.props.children.map((child, index) => height * -index)
 
     this.state = {
       scrollLockPage: this.pages[this.props.scrollLockPage]
@@ -73,7 +73,7 @@ export default class CubeNavigationVertical extends React.Component {
     @page: index
   */
   scrollTo(page, animated) {
-    animated = animated || true
+    animated = animated ? true : false
 
     if (animated) {
       Animated.spring(this._animatedValue, {
@@ -159,18 +159,17 @@ export default class CubeNavigationVertical extends React.Component {
 
     let array = this.pages
 
-    var i = 0
-    const minDiff = 1000
-    let ans
-    for (let i in array) {
-      const m = Math.abs(num - array[i])
+    var i = 0;
+    var minDiff = 1000;
+    var ans;
+    for (i in array) {
+      var m = Math.abs(num - array[i]);
       if (m < minDiff) {
-        minDiff = m
-        ans = array[i]
-        break
+        minDiff = m;
+        ans = array[i];
       }
     }
-    return ans
+    return ans;
   }
 
   render() {
