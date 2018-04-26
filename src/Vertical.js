@@ -140,7 +140,6 @@ export default class CubeNavigationVertical extends React.Component {
     let expandStyle = this.props.expandView ? { paddingRight: 100, paddingLeft: 100, width: width + 200, height } : { width, height }
     let style = [child.props.style, expandStyle]
     let props = {
-      ref: i,
       i,
       style,
     }
