@@ -36,10 +36,9 @@ export default class CubeNavigationVertical extends React.Component {
     });
 
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetResponderCapture: () => true,
+      onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dy) > 40,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-        Math.abs(gestureState.dy) > 40 /*&& gestureState.dy !== 0*/,
+        Math.abs(gestureState.dy) > 40,
       onPanResponderGrant: (e, gestureState) => {
         this._animatedValue.stopAnimation();
         this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
