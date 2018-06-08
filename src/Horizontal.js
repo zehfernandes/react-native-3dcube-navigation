@@ -36,10 +36,10 @@ export default class CubeNavigationHorizontal extends React.Component {
     });
 
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
       onMoveShouldSetResponderCapture: () => true,
+      onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dx) > 60,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-        Math.abs(gestureState.dx) > 60 /*&& gestureState.dy !== 0*/,
+        Math.abs(gestureState.dx) > 60,
       onPanResponderGrant: (e, gestureState) => {
         this._animatedValue.stopAnimation();
         this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
@@ -57,23 +57,23 @@ export default class CubeNavigationHorizontal extends React.Component {
         }
       },
       onPanResponderRelease: (e, gestureState) => {
-        if (Math.abs(gestureState.dx) > 5) {
-          let goTo = this._closest(this._value.x + gestureState.dx);
-          if (this.lockLast > goTo) return; //remove in the future
-          this._animatedValue.flattenOffset({
-            x: this._value.x,
-            y: this._value.y
-          });
-          Animated.spring(this._animatedValue, {
-            toValue: { x: goTo, y: 0 },
-            friction: 3,
-            tension: 0.6
-          }).start();
-          setTimeout(() => {
-            if (this.props.callBackAfterSwipe)
-              this.props.callBackAfterSwipe(goTo);
-          }, 500);
-        }
+        let mod = gestureState.dx > 0 ? 100 : -100;
+
+        let goTo = this._closest(this._value.x + mod);
+        if (this.lockLast > goTo) return; //remove in the future
+        this._animatedValue.flattenOffset({
+          x: this._value.x,
+          y: this._value.y
+        });
+        Animated.spring(this._animatedValue, {
+          toValue: { x: goTo, y: 0 },
+          friction: 3,
+          tension: 0.6
+        }).start();
+        setTimeout(() => {
+          if (this.props.callBackAfterSwipe)
+            this.props.callBackAfterSwipe(goTo);
+        }, 500);
       }
     });
   }
@@ -90,7 +90,7 @@ export default class CubeNavigationHorizontal extends React.Component {
     @page: index
   */
   scrollTo(page, animated) {
-    animated = animated ? true : false;
+    animated = animated == undefined ? true : animated;
 
     if (animated) {
       Animated.spring(this._animatedValue, {
@@ -213,7 +213,7 @@ export default class CubeNavigationHorizontal extends React.Component {
 
     return (
       <Animated.View
-        style={[{ position: "absolute" }, expandStyle]}
+        style={[{ position: "absolute" }]}
         ref={view => {
           this._scrollView = view;
         }}
