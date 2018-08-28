@@ -1,8 +1,16 @@
-<img src="http://www.dropbox.com/s/gku8mlgnmzqk6n6/3dcube_test.png?raw=1" width="150px" />
+<img src="imgs/logo.png" width="150px" />
 
 # react-native-3dcube-navigation
 
 ### Installation
+
+##### With Yarn
+
+```bash
+$ yarn add react-native-3dcube-navigation
+```
+
+##### With NPM
 
 ```bash
 $ npm i react-native-3dcube-navigation --save
@@ -10,7 +18,7 @@ $ npm i react-native-3dcube-navigation --save
 
 ### Demo
 
-<img src="http://www.dropbox.com/s/x9offjanyc9enwj/3dcube.gif?raw=1"  />
+<img src="imgs/demo.gif"  />
 
 ### Basic Usage
 
