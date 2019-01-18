@@ -6,7 +6,7 @@
     "ios",
     "android"
   ],
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "3D cube navigation JS",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/zehfernandes/react-native-3dcube-navigation#readme",
   "dependencies": {
-    "react": "^16.2.0"
+    "react": "^16.5.0"
   }
 }
