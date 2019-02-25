@@ -1,19 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   PanResponder,
   Animated,
   Dimensions,
   StyleSheet,
-  Image,
-  View,
-  Text,
   Platform
-} from "react-native";
-const { width, height } = Dimensions.get("window");
+} from 'react-native';
+const { width, height } = Dimensions.get('window');
 
-const PESPECTIVE = Platform.OS === "ios" ? 2.39 : 1.9;
-const TR_POSITION = Platform.OS === "ios" ? 2 : 1.4;
+const PESPECTIVE = Platform.OS === 'ios' ? 2.39 : 1.9;
+const TR_POSITION = Platform.OS === 'ios' ? 2 : 1.4;
 
 export default class CubeNavigationVertical extends React.Component {
   constructor(props) {
@@ -112,13 +109,13 @@ export default class CubeNavigationVertical extends React.Component {
     let translateY = scrollY.interpolate({
       inputRange: [pageY - height, pageY, pageY + height],
       outputRange: [(-height - 1) / TR_POSITION, 0, (height + 1) / TR_POSITION],
-      extrapolate: "clamp"
+      extrapolate: 'clamp'
     });
 
     let rotateX = scrollY.interpolate({
       inputRange: [pageY - height, pageY, pageY + height],
-      outputRange: ["60deg", "0deg", "-60deg"],
-      extrapolate: "clamp"
+      outputRange: ['60deg', '0deg', '-60deg'],
+      extrapolate: 'clamp'
     });
 
     let translateYAfterRotate = scrollY.interpolate({
@@ -137,7 +134,7 @@ export default class CubeNavigationVertical extends React.Component {
         (height + 1) / PESPECTIVE,
         +height + 1
       ],
-      extrapolate: "clamp"
+      extrapolate: 'clamp'
     });
 
     let opacity = scrollY.interpolate({
@@ -149,7 +146,7 @@ export default class CubeNavigationVertical extends React.Component {
         pageY + height
       ],
       outputRange: [0, 0.6, 1, 0.6, 0],
-      extrapolate: "clamp"
+      extrapolate: 'clamp'
     });
 
     return {
@@ -211,7 +208,7 @@ export default class CubeNavigationVertical extends React.Component {
 
     return (
       <Animated.View
-        style={[{ position: "absolute" }]}
+        style={[{ position: 'absolute' }]}
         ref={view => {
           this._scrollView = view;
         }}
@@ -219,7 +216,7 @@ export default class CubeNavigationVertical extends React.Component {
       >
         <Animated.View
           style={[
-            { backgroundColor: "#000", position: "absolute", width, height },
+            { backgroundColor: '#000', position: 'absolute', width, height },
             expandStyle
           ]}
         >
