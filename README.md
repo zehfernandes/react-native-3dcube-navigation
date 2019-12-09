@@ -68,6 +68,28 @@ import { CubeNavigationVertical } from 'react-native-3dcube-navigation'
 | scrollLockPage | null | `number` | Lock swipe to the next pages, referring the index number of the page |
 | callBackAfterSwipe | null | `function` | Callback function after release |
 
+### Events
+
+#### callBackAfterSwipe
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| position | `number`   | Position of the view. |
+| index | `number`   | Index of the view |
+
+```js
+callBackAfterSwipe = (position, index){
+  
+}
+
+render(){
+  return (
+    <CubeNavigationHorizontal callBackAfterSwipe={this.callBackAfterSwipe}>
+    </CubeNavigationHorizontal>
+  );
+}
+```
+
 ### Methods
 
 #### scrollTo(index, animated)
