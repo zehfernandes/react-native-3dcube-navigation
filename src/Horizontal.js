@@ -32,12 +32,38 @@ export default class CubeNavigationHorizontal extends React.Component {
       this._value = value;
     });
 
+    const onDoneSwiping = (gestureState) => {
+      if (this.props.callbackOnSwipe) {
+        this.props.callbackOnSwipe(false);
+      }
+      let mod = gestureState.dx > 0 ? 100 : -100;
+
+      let goTo = this._closest(this._value.x + mod);
+      if (this.lockLast > goTo) return; //remove in the future
+      this._animatedValue.flattenOffset({
+        x: this._value.x,
+        y: this._value.y
+      });
+      Animated.spring(this._animatedValue, {
+        toValue: { x: goTo, y: 0 },
+        friction: 3,
+        tension: 0.6
+      }).start();
+      setTimeout(() => {
+        if (this.props.callBackAfterSwipe)
+          this.props.callBackAfterSwipe(goTo, Math.abs(goTo / width));
+      }, 500);
+    }
+
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dx) > 60,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
         Math.abs(gestureState.dx) > 60,
       onPanResponderGrant: (e, gestureState) => {
+        if (this.props.callbackOnSwipe) {
+          this.props.callbackOnSwipe(true);
+        }
         this._animatedValue.stopAnimation();
         this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
       },
@@ -54,24 +80,11 @@ export default class CubeNavigationHorizontal extends React.Component {
         }
       },
       onPanResponderRelease: (e, gestureState) => {
-        let mod = gestureState.dx > 0 ? 100 : -100;
-
-        let goTo = this._closest(this._value.x + mod);
-        if (this.lockLast > goTo) return; //remove in the future
-        this._animatedValue.flattenOffset({
-          x: this._value.x,
-          y: this._value.y
-        });
-        Animated.spring(this._animatedValue, {
-          toValue: { x: goTo, y: 0 },
-          friction: 3,
-          tension: 0.6
-        }).start();
-        setTimeout(() => {
-          if (this.props.callBackAfterSwipe)
-            this.props.callBackAfterSwipe(goTo, Math.abs(goTo / width));
-        }, 500);
-      }
+        onDoneSwiping(gestureState);
+      },
+      onPanResponderTerminate: (e, gestureState) => {
+        onDoneSwiping(gestureState);
+      },
     });
   }
 
@@ -231,6 +244,7 @@ export default class CubeNavigationHorizontal extends React.Component {
 
 CubeNavigationHorizontal.propTypes = {
   callBackAfterSwipe: PropTypes.func,
+  callbackOnSwipe: PropTypes.func,
   scrollLockPage: PropTypes.number,
   expandView: PropTypes.bool
 };
