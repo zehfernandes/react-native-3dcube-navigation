@@ -69,6 +69,28 @@ import { CubeNavigationVertical } from 'react-native-3dcube-navigation'
 | callBackAfterSwipe | null | `function` | Callback function after release |
 | callbackOnSwipe | null | `function` | Callback function on start swipe & release, callback's first argument `started` defines if it's the start of the swipe or the release  |
 
+### Events
+
+#### callBackAfterSwipe
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| position | `number`   | Position of the view. |
+| index | `number`   | Index of the view |
+
+```js
+callBackAfterSwipe = (position, index){
+  
+}
+
+render(){
+  return (
+    <CubeNavigationHorizontal callBackAfterSwipe={this.callBackAfterSwipe}>
+    </CubeNavigationHorizontal>
+  );
+}
+```
+
 ### Methods
 
 #### scrollTo(index, animated)
