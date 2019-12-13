@@ -67,6 +67,7 @@ import { CubeNavigationVertical } from 'react-native-3dcube-navigation'
 | expandView | false | `bool` | If `true`, the view expands not showing the background |
 | loop | false | `bool` | If `true`, the last face will be allowed to scroll to the first |
 | scrollLockPage | null | `number` | Lock swipe to the next pages, referring the index number of the page |
+| responderCaptureDx | 60 | `number` | The increment at which the responder captures the touch |
 | callBackAfterSwipe | null | `function` | Callback function after release |
 | callbackOnSwipe | null | `function` | Callback function on start swipe & release, callback's first argument `started` defines if it's the start of the swipe or the release  |
 
