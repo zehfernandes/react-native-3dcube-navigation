@@ -118,47 +118,63 @@ export default class CubeNavigationHorizontal extends React.Component {
   _getTransformsFor = i => {
     let scrollX = this._animatedValue.x;
     let pageX = -width * i;
+    let loopVariable = (variable, sign = 1) => variable + Math.sign(sign) * (this.fullWidth + width );
+    let padInput = (variables) => {
+      if (!this.props.loop) 
+        return variables;
+      const returnedVariables = [...variables];
+      returnedVariables.unshift(...variables.map(variable => loopVariable(variable, -1)))
+      returnedVariables.push(...variables.map(variable => loopVariable(variable, 1)))
+      return returnedVariables;
+    }
+    let padOutput = (variables) => {
+      if (!this.props.loop) 
+        return variables;
+      const returnedVariables = [...variables];
+      returnedVariables.unshift(...variables)
+      returnedVariables.push(...variables)
+      return returnedVariables;
+    }
 
     let translateX = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      outputRange: [(-width - 1) / TR_POSITION, 0, (width + 1) / TR_POSITION],
+      inputRange: padInput([pageX - width, pageX, pageX + width]),
+      outputRange: padOutput([(-width - 1) / TR_POSITION, 0, (width + 1) / TR_POSITION]),
       extrapolate: 'clamp'
     });
 
     let rotateY = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      outputRange: ['-60deg', '0deg', '60deg'],
+      inputRange: padInput([pageX - width, pageX, pageX + width]),
+      outputRange: padOutput(['-60deg', '0deg', '60deg']),
       extrapolate: 'clamp'
     });
 
     let translateXAfterRotate = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      inputRange: [
+      inputRange: padInput([
         pageX - width,
         pageX - width + 0.1,
         pageX,
         pageX + width - 0.1,
         pageX + width
-      ],
-      outputRange: [
+      ]),
+      outputRange: padOutput([
         -width - 1,
         (-width - 1) / PESPECTIVE,
         0,
         (width + 1) / PESPECTIVE,
         +width + 1
-      ],
+      ]),
       extrapolate: 'clamp'
     });
 
     let opacity = scrollX.interpolate({
-      inputRange: [
+      inputRange: padInput([
         pageX - width,
         pageX - width + 10,
         pageX,
         pageX + width - 250,
         pageX + width
-      ],
-      outputRange: [0, 0.6, 1, 0.6, 0],
+      ]),
+      outputRange: padOutput([0, 0.6, 1, 0.6, 0]),
       extrapolate: 'clamp'
     });
 
@@ -244,9 +260,11 @@ CubeNavigationHorizontal.propTypes = {
   callBackAfterSwipe: PropTypes.func,
   callbackOnSwipe: PropTypes.func,
   scrollLockPage: PropTypes.number,
-  expandView: PropTypes.bool
+  expandView: PropTypes.bool,
+  loop: PropTypes.bool
 };
 
 CubeNavigationHorizontal.defaultProps = {
-  expandView: false
+  expandView: false,
+  loop: false
 };
