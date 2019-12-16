@@ -57,9 +57,9 @@ export default class CubeNavigationHorizontal extends React.Component {
 
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
-      onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dx) > 60,
+      onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dx) > this.props.responderCaptureDx,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-        Math.abs(gestureState.dx) > 60,
+        Math.abs(gestureState.dx) > this.props.responderCaptureDx,
       onPanResponderGrant: (e, gestureState) => {
         if (this.props.callbackOnSwipe) {
           this.props.callbackOnSwipe(true);
@@ -246,9 +246,11 @@ CubeNavigationHorizontal.propTypes = {
   callBackAfterSwipe: PropTypes.func,
   callbackOnSwipe: PropTypes.func,
   scrollLockPage: PropTypes.number,
+  responderCaptureDx: PropTypes.number,
   expandView: PropTypes.bool
 };
 
 CubeNavigationHorizontal.defaultProps = {
+  responderCaptureDx: 60,
   expandView: false
 };
