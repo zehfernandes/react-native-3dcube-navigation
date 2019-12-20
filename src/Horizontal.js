@@ -17,6 +17,7 @@ export default class CubeNavigationHorizontal extends React.Component {
     super(props);
 
     this.pages = this.props.children.map((child, index) => width * -index);
+    this.fullWidth = (this.props.children.length - 1) * width;
 
     this.state = {
       scrollLockPage: this.pages[this.props.scrollLockPage]
@@ -39,7 +40,6 @@ export default class CubeNavigationHorizontal extends React.Component {
       let mod = gestureState.dx > 0 ? 100 : -100;
 
       let goTo = this._closest(this._value.x + mod);
-      if (this.lockLast > goTo) return; //remove in the future
       this._animatedValue.flattenOffset({
         x: this._value.x,
         y: this._value.y
@@ -51,7 +51,7 @@ export default class CubeNavigationHorizontal extends React.Component {
       }).start();
       setTimeout(() => {
         if (this.props.callBackAfterSwipe)
-          this.props.callBackAfterSwipe(goTo);
+          this.props.callBackAfterSwipe(goTo, Math.abs(goTo / width));
       }, 500);
     }
 
@@ -68,16 +68,14 @@ export default class CubeNavigationHorizontal extends React.Component {
         this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
       },
       onPanResponderMove: (e, gestureState) => {
-        Animated.event([null, { dx: this._animatedValue.x }])(e, gestureState);
-
-        // Avoid last movement
-        this.lockLast =
-          this.state.scrollLockPage != undefined
-            ? -this.state.scrollLockPage
-            : this.pages[this.pages.length - 1];
-        if (this._value.x > this.pages[0] || this._value.x < this.lockLast) {
-          this._animatedValue.setValue({ x: 0, y: 0 });
+        if (this.props.loop) {
+          if (gestureState.dx < 0 && this._value.x < - this.fullWidth) {
+            this._animatedValue.setOffset({ x: width });
+          } else if (gestureState.dx > 0 && this._value.x > 0) {
+            this._animatedValue.setOffset({ x: - (this.fullWidth + width ) });
+          }
         }
+        Animated.event([null, { dx: this._animatedValue.x }])(e, gestureState);
       },
       onPanResponderRelease: (e, gestureState) => {
         onDoneSwiping(gestureState);
@@ -120,47 +118,63 @@ export default class CubeNavigationHorizontal extends React.Component {
   _getTransformsFor = i => {
     let scrollX = this._animatedValue.x;
     let pageX = -width * i;
+    let loopVariable = (variable, sign = 1) => variable + Math.sign(sign) * (this.fullWidth + width );
+    let padInput = (variables) => {
+      if (!this.props.loop) 
+        return variables;
+      const returnedVariables = [...variables];
+      returnedVariables.unshift(...variables.map(variable => loopVariable(variable, -1)))
+      returnedVariables.push(...variables.map(variable => loopVariable(variable, 1)))
+      return returnedVariables;
+    }
+    let padOutput = (variables) => {
+      if (!this.props.loop) 
+        return variables;
+      const returnedVariables = [...variables];
+      returnedVariables.unshift(...variables)
+      returnedVariables.push(...variables)
+      return returnedVariables;
+    }
 
     let translateX = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      outputRange: [(-width - 1) / TR_POSITION, 0, (width + 1) / TR_POSITION],
+      inputRange: padInput([pageX - width, pageX, pageX + width]),
+      outputRange: padOutput([(-width - 1) / TR_POSITION, 0, (width + 1) / TR_POSITION]),
       extrapolate: 'clamp'
     });
 
     let rotateY = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      outputRange: ['-60deg', '0deg', '60deg'],
+      inputRange: padInput([pageX - width, pageX, pageX + width]),
+      outputRange: padOutput(['-60deg', '0deg', '60deg']),
       extrapolate: 'clamp'
     });
 
     let translateXAfterRotate = scrollX.interpolate({
-      inputRange: [pageX - width, pageX, pageX + width],
-      inputRange: [
+      inputRange: padInput([
         pageX - width,
         pageX - width + 0.1,
         pageX,
         pageX + width - 0.1,
         pageX + width
-      ],
-      outputRange: [
+      ]),
+      outputRange: padOutput([
         -width - 1,
         (-width - 1) / PESPECTIVE,
         0,
         (width + 1) / PESPECTIVE,
         +width + 1
-      ],
+      ]),
       extrapolate: 'clamp'
     });
 
     let opacity = scrollX.interpolate({
-      inputRange: [
+      inputRange: padInput([
         pageX - width,
         pageX - width + 10,
         pageX,
         pageX + width - 250,
         pageX + width
-      ],
-      outputRange: [0, 0.6, 1, 0.6, 0],
+      ]),
+      outputRange: padOutput([0, 0.6, 1, 0.6, 0]),
       extrapolate: 'clamp'
     });
 
@@ -253,4 +267,6 @@ CubeNavigationHorizontal.propTypes = {
 CubeNavigationHorizontal.defaultProps = {
   responderCaptureDx: 60,
   expandView: false
+  expandView: PropTypes.bool,
+  loop: PropTypes.bool
 };
