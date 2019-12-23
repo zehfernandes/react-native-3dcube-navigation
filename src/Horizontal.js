@@ -20,6 +20,7 @@ export default class CubeNavigationHorizontal extends React.Component {
     this.fullWidth = (this.props.children.length - 1) * width;
 
     this.state = {
+      currentPage: 0,
       scrollLockPage: this.pages[this.props.scrollLockPage]
     };
   }
@@ -39,7 +40,8 @@ export default class CubeNavigationHorizontal extends React.Component {
       }
       let mod = gestureState.dx > 0 ? 100 : -100;
 
-      let goTo = this._closest(this._value.x + mod);
+      const currentPage = this._closest(this._value.x + mod)
+      let goTo = this.pages[currentPage];
       this._animatedValue.flattenOffset({
         x: this._value.x,
         y: this._value.y
@@ -50,6 +52,9 @@ export default class CubeNavigationHorizontal extends React.Component {
         tension: 0.6
       }).start();
       setTimeout(() => {
+        this.setState({
+          currentPage
+        });
         if (this.props.callBackAfterSwipe)
           this.props.callBackAfterSwipe(goTo, Math.abs(goTo / width));
       }, 500);
@@ -208,6 +213,7 @@ export default class CubeNavigationHorizontal extends React.Component {
           this._getTransformsFor(i, false)
         ]}
         key={`child- ${i}`}
+        pointerEvents={this.state.currentPage == i ? 'auto' :'none'}
       >
         {element}
       </Animated.View>
@@ -216,7 +222,6 @@ export default class CubeNavigationHorizontal extends React.Component {
 
   _closest = num => {
     let array = this.pages;
-
     let i = 0;
     let minDiff = 1000;
     let ans;
@@ -224,7 +229,7 @@ export default class CubeNavigationHorizontal extends React.Component {
       let m = Math.abs(num - array[i]);
       if (m < minDiff) {
         minDiff = m;
-        ans = array[i];
+        ans = i;
       }
     }
     return ans;
