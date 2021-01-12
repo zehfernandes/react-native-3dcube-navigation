@@ -20,15 +20,15 @@ export default class CubeNavigationHorizontal extends React.Component {
     this.fullWidth = (this.props.children.length - 1) * width;
 
     this.state = {
-      currentPage: 0,
+      currentPage: this.props.initialPage || 0,
       scrollLockPage: this.pages[this.props.scrollLockPage]
     };
   }
 
   componentWillMount() {
     this._animatedValue = new Animated.ValueXY();
-    this._animatedValue.setValue({ x: 0, y: 0 });
-    this._value = { x: 0, y: 0 };
+    this._animatedValue.setValue({ x: this.pages[this.state.currentPage], y: 0 });
+    this._value = { x: this.pages[this.state.currentPage], y: 0 };
 
     this._animatedValue.addListener(value => {
       this._value = value;
@@ -77,7 +77,7 @@ export default class CubeNavigationHorizontal extends React.Component {
           if (gestureState.dx < 0 && this._value.x < - this.fullWidth) {
             this._animatedValue.setOffset({ x: width });
           } else if (gestureState.dx > 0 && this._value.x > 0) {
-            this._animatedValue.setOffset({ x: - (this.fullWidth + width ) });
+            this._animatedValue.setOffset({ x: - (this.fullWidth + width) });
           }
         }
         Animated.event([null, { dx: this._animatedValue.x }])(e, gestureState);
@@ -126,9 +126,9 @@ export default class CubeNavigationHorizontal extends React.Component {
   _getTransformsFor = i => {
     let scrollX = this._animatedValue.x;
     let pageX = -width * i;
-    let loopVariable = (variable, sign = 1) => variable + Math.sign(sign) * (this.fullWidth + width );
+    let loopVariable = (variable, sign = 1) => variable + Math.sign(sign) * (this.fullWidth + width);
     let padInput = (variables) => {
-      if (!this.props.loop) 
+      if (!this.props.loop)
         return variables;
       const returnedVariables = [...variables];
       returnedVariables.unshift(...variables.map(variable => loopVariable(variable, -1)))
@@ -136,7 +136,7 @@ export default class CubeNavigationHorizontal extends React.Component {
       return returnedVariables;
     }
     let padOutput = (variables) => {
-      if (!this.props.loop) 
+      if (!this.props.loop)
         return variables;
       const returnedVariables = [...variables];
       returnedVariables.unshift(...variables)
@@ -216,7 +216,7 @@ export default class CubeNavigationHorizontal extends React.Component {
           this._getTransformsFor(i, false)
         ]}
         key={`child- ${i}`}
-        pointerEvents={this.state.currentPage == i ? 'auto' :'none'}
+        pointerEvents={this.state.currentPage == i ? 'auto' : 'none'}
       >
         {element}
       </Animated.View>
@@ -268,6 +268,7 @@ CubeNavigationHorizontal.propTypes = {
   callBackAfterSwipe: PropTypes.func,
   callbackOnSwipe: PropTypes.func,
   scrollLockPage: PropTypes.number,
+  initialPage: PropTypes.number,
   responderCaptureDx: PropTypes.number,
   expandView: PropTypes.bool,
   loop: PropTypes.bool
